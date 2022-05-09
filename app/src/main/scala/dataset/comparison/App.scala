@@ -5,8 +5,6 @@ package dataset.comparison
 
 object App {
   def main(args: Array[String]): Unit = {
-    println(greeting())
+    println("Hello, World!")
   }
-
-  def greeting(): String = "Hello, world!"
 }
