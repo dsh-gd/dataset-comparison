@@ -19,16 +19,14 @@ object App {
       .csv("src/main/resources/historic_indicators.csv")
 
     val pattern: Regex = """ \[.+\]""".r
-    val columnNames = ds2.columns
-    val newColumnNames = columnNames.map(pattern.replaceAllIn(_, ""))
     val renamedDs2 = ds2.columns.foldLeft(ds2) {
-      (tmpDs, colName) => tmpDs.withColumnRenamed(colName, pattern.replaceAllIn(colName, ""))
+      (tmpDs, column) => tmpDs.withColumnRenamed(column, pattern.replaceAllIn(column, ""))
     }
 
-    val commonColumnNames = ds1.columns.intersect(renamedDs2.columns)
+    val commonColumns = ds1.columns.intersect(renamedDs2.columns)
 
-    println(s"Number of common columns: ${commonColumnNames.length}")
+    println(s"Number of common columns: ${commonColumns.length}")
     println("Common columns:")
-    commonColumnNames.foreach(println)
+    commonColumns.foreach(println)
   }
 }
