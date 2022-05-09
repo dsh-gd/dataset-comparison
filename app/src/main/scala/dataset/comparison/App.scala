@@ -2,6 +2,7 @@ package dataset.comparison
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.Dataset
+import org.apache.spark.sql.functions._
 import scala.util.matching.Regex
 
 
@@ -23,10 +24,16 @@ object App {
       (tmpDs, column) => tmpDs.withColumnRenamed(column, pattern.replaceAllIn(column, ""))
     }
 
-    val commonColumns = ds1.columns.intersect(renamedDs2.columns)
+    val commonColumns = ds1.columns.intersect(renamedDs2.columns).map(col)
 
     println(s"Number of common columns: ${commonColumns.length}")
     println("Common columns:")
     commonColumns.foreach(println)
+
+    val newDs1 = ds1.select(commonColumns: _*)
+    val newDs2 = renamedDs2.select(commonColumns: _*)
+
+    newDs1.printSchema()
+    newDs2.printSchema()
   }
 }
